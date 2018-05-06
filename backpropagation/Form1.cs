@@ -19,11 +19,13 @@ namespace backpropagation
         Bitmap bmp;
         Brush brush;
         Pen pen;
+        Bitmap pic;
         private void Form1_Load(object sender, EventArgs e)
         {
             Brush brush = new SolidBrush(Color.Black);
             pen = new Pen(brush, 11);
             bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            pic = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             for (int i = 0; i < pictureBox1.Width; i++)
             {
                 for (int j = 0; j < pictureBox1.Height; j++)
@@ -43,6 +45,26 @@ namespace backpropagation
                     gr.DrawEllipse(pen, e.X, e.Y, 11, 11);
                 }
                 pictureBox1.Image = bmp;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            pic = bmp;
+            clearBMP();
+
+        }
+        /// <summary>
+        /// Очищает холст
+        /// </summary>
+        private void clearBMP()
+        {
+            for (int i = 0; i < bmp.Size.Height i++)
+            {
+                for (int j = 0; j < bmp.Size.Width j++)
+                {
+                    bmp.SetPixel(i, j, Color.White);
+                }
             }
         }
     }
