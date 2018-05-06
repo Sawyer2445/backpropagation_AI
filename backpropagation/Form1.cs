@@ -17,40 +17,33 @@ namespace backpropagation
             InitializeComponent();
         }
         Bitmap bmp;
-        Brush brush;
+        //Brush brush;
         Pen pen;
         Bitmap pic;
+        network neuronNetwork;
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             Brush brush = new SolidBrush(Color.Black);
             pen = new Pen(brush, 11);
-            bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            pic = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            for (int i = 0; i < pictureBox1.Width; i++)
+            bmp = new Bitmap(3, 5);
+            pic = new Bitmap(3, 5);
+            for (int i = 0; i < 3; i++)
             {
-                for (int j = 0; j < pictureBox1.Height; j++)
+                for (int j = 0; j < 5; j++)
                 {
                     bmp.SetPixel(i, j, Color.White);
                 }
             }
-            pictureBox1.Image = bmp;
+          
         }
 
-        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                using (Graphics gr = Graphics.FromImage(bmp))
-                {
-                    gr.DrawEllipse(pen, e.X, e.Y, 11, 11);
-                }
-                pictureBox1.Image = bmp;
-            }
-        }
-
+     
         private void button1_Click(object sender, EventArgs e)
         {
             pic = bmp;
+            neuronNetwork = new network(pic);
+            richTextBox1.Text += "\nDONE\n";
             clearBMP();
 
         }
@@ -59,13 +52,28 @@ namespace backpropagation
         /// </summary>
         private void clearBMP()
         {
-            for (int i = 0; i < bmp.Size.Height; i++)
-            {
-                for (int j = 0; j < bmp.Size.Width; j++)
-                {
-                    bmp.SetPixel(i, j, Color.White);
-                }
-            }
+            //for (int i = 0; i < bmp.Size.Height; i++)
+            //{
+            //    for (int j = 0; j < bmp.Size.Width; j++)
+            //    {
+            //        bmp.SetPixel(i, j, Color.White);
+            //    }
+            //}
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Title = "Укажите файл с цифрой";
+            openFileDialog1.ShowDialog();
+            bmp = new Bitmap(openFileDialog1.FileName);
+            pictureBox1.Image = bmp;
+            neuronNetwork.work(bmp);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            neuronNetwork.backpropagation();
+            richTextBox1.Text += "\nСумма ошибка : " + neuronNetwork.sumSigma_k().ToString() + "\n";
         }
     }
 }

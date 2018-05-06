@@ -88,6 +88,7 @@ namespace backpropagation
             Yk = new neuronY[k];
             v_ij = new double[i, j];
             v_Oj = new double[j];
+            delta_v_ij = new double[i, j];
 
             w_jk = new double[j, k];
             w_Ok = new double[k];
@@ -103,7 +104,7 @@ namespace backpropagation
             int N = 0;
             for (int ii = 0; ii < pic.Size.Width; ii++)
             {
-                for (int jj = 0; j < pic.Size.Height; jj++)
+                for (int jj = 0; jj < pic.Size.Height; jj++)
                 {
                     if (pic.GetPixel(ii, jj).R == 0)
                         T[N] = 1.0;
@@ -115,9 +116,9 @@ namespace backpropagation
 
             //Выбор певоначального значение весов и смещения 
   
-            for (int ii = 0; ii < j; ii++)
+            for (int ii = 0; ii < i; ii++)
             {
-                for (int jj = 0; j < pic.Size.Height; jj++)
+                for (int jj = 0; jj < j; jj++)
                 {
                     Random rand1 = new Random();
                     double min1 = -0.5;
@@ -130,9 +131,9 @@ namespace backpropagation
                 v_Oj[ii] = rand.NextDouble() * (max - min) + min;
             }
 
-            for (int ii = 0; ii < j; ii++)
+            for (int ii = 0; ii < i; ii++)
             {
-                for (int jj = 0; j < pic.Size.Height; jj++)
+                for (int jj = 0; jj < j; jj++)
                 {
                     Random rand1 = new Random();
                     double min1 = -0.5;
@@ -152,7 +153,7 @@ namespace backpropagation
             int N = 0;
             for (int ii = 0; ii < bmp.Size.Width; ii++)
             {
-                for (int jj = 0; j < bmp.Size.Height; jj++)
+                for (int jj = 0; jj < bmp.Size.Height; jj++)
                 {
                     if (bmp.GetPixel(ii, jj).R == 0)
                         Xi[N] = new neuronX(1);
@@ -175,10 +176,10 @@ namespace backpropagation
             }
 
             //отправка сигналов Y-нейронам
-            for (int kk = 0; kk < Yk.Length; kk++)
+            for (int kk = 0; kk < k; kk++)
             {
                 double y_in = 0;
-                for (int jj = 0; jj < Zj.Length; jj++)
+                for (int jj = 0; jj < j; jj++)
                 {
                     y_in += Zj[jj].out_z() * w_jk[jj, kk];
                 }
@@ -279,6 +280,15 @@ namespace backpropagation
         private double f(double in_)
         {
             return 1 / (1 + Math.Exp(-1 * in_));
+        }
+        public double sumSigma_k()
+        {
+            double sum = 0;
+            for (int kk = 0; kk < k; kk++)
+            {
+                sum += sigma_k[kk];
+            }
+            return sum;
         }
 
     }
