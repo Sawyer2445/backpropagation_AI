@@ -59,9 +59,9 @@ namespace backpropagation
         /// </summary>
         private void clearBMP()
         {
-            for (int i = 0; i < bmp.Size.Height i++)
+            for (int i = 0; i < bmp.Size.Height; i++)
             {
-                for (int j = 0; j < bmp.Size.Width j++)
+                for (int j = 0; j < bmp.Size.Width; j++)
                 {
                     bmp.SetPixel(i, j, Color.White);
                 }
