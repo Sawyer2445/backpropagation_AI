@@ -13,8 +13,8 @@ namespace backpropagation
         /// </summary>
         /// <param name="out_x">массив выходных сзначений нейронов X</param>
         /// <param name="v_ij">корректировки весов</param>
-        /// <param name="v_Ok">смещение</param>
-        public neuronZ(ref double[] out_x, ref double[][] v_ij, double[] v_Ok)
+        /// <param name="v_Oj">смещение</param>
+        public neuronZ(ref double[] out_x, ref double[][] v_ij, double[] v_Oj)
         {
             ///тут считается z_in
         }

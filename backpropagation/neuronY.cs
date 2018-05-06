@@ -13,9 +13,9 @@ namespace backpropagation
         /// создает нейрон с его сигналом
         /// </summary>
         /// <param name="out_z">массив выходных сзначения нейронов Z</param>
-        /// <param name="w_ij">корректировки весов</param>
+        /// <param name="w_jk">корректировки весов</param>
         /// <param name="w_Ok">смещение</param>
-        public neuronY(ref double[] out_z, ref double[][] w_ij, double[] w_Ok)
+        public neuronY(ref double[] out_z, ref double[][] w_jk, double[] w_Ok)
         {
             //тут считется y_in
         }
