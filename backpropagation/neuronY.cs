@@ -12,18 +12,14 @@ namespace backpropagation
         /// <summary>
         /// создает нейрон с его сигналом
         /// </summary>
-        /// <param name="out_z">массив выходных сзначения нейронов Z</param>
-        /// <param name="w_jk">корректировки весов</param>
-        /// <param name="w_Ok">смещение</param>
-        public neuronY(ref double[] out_z, ref double[][] w_jk, double[] w_Ok)
+        /// <param name="y_in">y_in считает сеть</param>
+        public neuronY(double y_in)
         {
-            //тут считется y_in
+            this.y_in = y_in;
         }
         public double out_y()
         {
-            ///возвращается f(y_in)
-            return 1.0;
-            
+            return f(y_in);   
         }
         /// <summary>
         /// активационная функция
@@ -32,8 +28,8 @@ namespace backpropagation
         /// <returns>результат работы активационной функции</returns>
         private double f(double in_)
         {
-            return in_;
+            return 1 / (1 + Math.Exp(-1 * in_));
         }
-        private double y_in;
+        public double y_in;
     }
 }

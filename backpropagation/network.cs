@@ -26,13 +26,17 @@ namespace backpropagation
         /// </summary>
         public double[] T;
         /// <summary>
-        /// Корректировки весов w_jk
+        /// Величина ошибки весов w_jk
         /// </summary>
         public double[] sigma_k;
         /// <summary>
-        /// Корректировки весов v_ij
+        /// Величина ошибки весов v_ij
         /// </summary>
         public double[] sigma_j;
+        /// <summary>
+        /// сумма ошибки w_jk
+        /// </summary>
+        public double[] sigma_in_j;
 
         /// <summary>
         /// смещение 
@@ -46,11 +50,23 @@ namespace backpropagation
         /// <summary>
         /// весы связей X -> Z
         /// </summary>
-        double[][] v_ij;
+        public double[,] v_ij;
+        /// <summary>
+        /// корректировки весов v_ij
+        /// </summary>
+        public double[,] delta_v_ij;
         /// <summary>
         /// весы связей Z -> Y
         /// </summary>
-        double[][] w_jk;
+        public double[,] w_jk;
+        /// <summary>
+        /// корректировки весов w_jk
+        /// </summary>
+        public double[,] delta_w_jk;
+        /// <summary>
+        /// коррестировки для смещения w_Ok
+        /// </summary>
+        public double[] delta_w_Ok;
 
         /// <summary>
         /// скорость обучения
@@ -66,9 +82,22 @@ namespace backpropagation
             i = pic.Size.Width * pic.Size.Height;
             j = i;
             k = j;
+            a = 2;
             Xi = new neuronX[i];
             Zj = new neuronZ[j];
             Yk = new neuronY[k];
+            v_ij = new double[i, j];
+            v_Oj = new double[j];
+
+            w_jk = new double[j, k];
+            w_Ok = new double[k];
+            delta_w_jk = new double[j, k];
+            delta_w_Ok = new double[k];
+
+            T = new double[i];
+            sigma_j = new double[j];
+            sigma_k = new double[k];
+            sigma_in_j = new double[j];
 
             //Заполнение примера для сравнения 
             int N = 0;
@@ -93,7 +122,7 @@ namespace backpropagation
                     Random rand1 = new Random();
                     double min1 = -0.5;
                     double max1 = 0.5;
-                    v_ij[ii][jj] = rand1.NextDouble() * (max1 - min1) + min1;
+                    v_ij[ii, jj] = rand1.NextDouble() * (max1 - min1) + min1;
                 }
                 Random rand = new Random();
                 double min = -0.5;
@@ -108,7 +137,7 @@ namespace backpropagation
                     Random rand1 = new Random();
                     double min1 = -0.5;
                     double max1 = 0.5;
-                    w_jk[ii][jj] = rand1.NextDouble() * (max1 - min1) + min1;
+                    w_jk[ii, jj] = rand1.NextDouble() * (max1 - min1) + min1;
                 }
                 Random rand = new Random();
                 double min = -0.5;
@@ -116,5 +145,141 @@ namespace backpropagation
                 w_Ok[ii] = rand.NextDouble() * (max - min) + min;
             }
         }
+
+        public void work(Bitmap bmp)
+        {
+            //отправка сигнала X-нейронам 
+            int N = 0;
+            for (int ii = 0; ii < bmp.Size.Width; ii++)
+            {
+                for (int jj = 0; j < bmp.Size.Height; jj++)
+                {
+                    if (bmp.GetPixel(ii, jj).R == 0)
+                        Xi[N] = new neuronX(1);
+                    else
+                        Xi[N] = new neuronX(0);
+                    N++;
+                }
+            }
+
+            //отправка сигналов Z-нейронам
+            for (int jj = 0; jj < Zj.Length; jj++)
+            {
+                double z_in = 0;
+                for (int ii = 0; ii < Xi.Length; i++)
+                {
+                    z_in += Xi[ii].out_x() * v_ij[ii, jj];
+                }
+                z_in += v_Oj[jj];
+                Zj[jj] = new neuronZ(z_in);
+            }
+
+            //отправка сигналов Y-нейронам
+            for (int kk = 0; kk < Yk.Length; kk++)
+            {
+                double y_in = 0;
+                for (int jj = 0; jj < Zj.Length; jj++)
+                {
+                    y_in += Zj[jj].out_z() * w_jk[jj, kk];
+                }
+                y_in += w_Ok[kk];
+                Yk[kk] = new neuronY(y_in);
+            }
+        }
+        public void backpropagation()
+        {
+            //вычисление ошибок весов w_ij
+            for (int kk = 0; kk < k; kk++)
+            {
+                sigma_k[kk] = (T[kk] - Yk[kk].out_y()) * ff(Yk[kk].y_in);
+            }
+            //вычисление коррекировки для весов w_jk
+            for (int jj = 0; jj < j; jj++)
+            {
+                for (int kk = 0; kk < k; kk++)
+                {
+                    delta_w_jk[jj, kk] = a * sigma_k[kk] * Zj[jj].out_z();
+                }
+            }
+            //вычисление корректировки смещения w_Ok
+            for (int kk = 0; kk < k; kk++)
+            {
+                delta_w_Ok[kk] = a * sigma_k[kk];
+            }
+
+
+            //вычисления суммы ошибок w_jk
+            for (int jj = 0; jj < j; jj++)
+            {
+                double sum_signK_and_w_jk = 0;
+                for (int kk = 0; kk < k; kk++)
+                {
+
+                    sum_signK_and_w_jk += sigma_k[kk] * w_jk[jj, kk];
+                }
+                sigma_in_j[jj] = sum_signK_and_w_jk;
+            }
+
+
+            //вычисление величины ошибки для v_ij
+            for(int jj = 0; jj < j; j++)
+            {
+                sigma_j[jj] = sigma_in_j[jj] * ff(Zj[jj].z_in);
+            }
+
+            //вычисление корректировки весов v_ij
+            for (int ii = 0; ii < i; ii++)
+            {
+                for (int jj = 0; jj < j; jj++)
+                {
+                    delta_v_ij[ii, jj] = a * sigma_j[jj] * Xi[ii].out_x();
+                }
+            }
+
+            //вычисление величину корректировки смещения 
+            for (int jj = 0; jj < j; jj++)
+            {
+                v_Oj[jj] = a * sigma_j[jj];
+            }
+
+            //ИЗМЕНЕНИЕ ВЕСОВ w_jk
+            for (int jj = 0; jj < j; j++)
+            {
+                for (int kk = 0; kk < k; kk++)
+                {
+                    w_jk[jj, kk] = w_jk[jj, kk] + delta_w_jk[jj, kk];
+                }
+            }
+
+            //ИЗМЕНЕНИЕ ВЕСОВ v_ij
+            for (int ii = 0; ii < i; ii++)
+            {
+                for (int jj = 0; jj < j; jj++)
+                {
+                    v_ij[ii, jj] = v_ij[ii, jj] * delta_v_ij[ii, jj];
+                }
+            }
+
+
+        }
+        /// <summary>
+        /// производная анализирующей функции
+        /// </summary>
+        /// <param name="x">аргумент</param>
+        /// <returns>значение</returns>
+        private double ff(double x)
+        {
+            return f(x) * (1 - f(x));
+        }
+        /// <summary>
+        /// активационная функция
+        /// </summary>
+        /// <param name="in_">аргумент</param>
+        /// <returns>значение</returns>
+        private double f(double in_)
+        {
+            return 1 / (1 + Math.Exp(-1 * in_));
+        }
+
     }
 }
