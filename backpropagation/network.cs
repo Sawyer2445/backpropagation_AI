@@ -156,18 +156,18 @@ namespace backpropagation
                 for (int jj = 0; jj < bmp.Size.Height; jj++)
                 {
                     if (bmp.GetPixel(ii, jj).R == 0)
-                        Xi[N] = new neuronX(1);
+                        Xi[N] = new neuronX(1.0);
                     else
-                        Xi[N] = new neuronX(0);
+                        Xi[N] = new neuronX(0.0);
                     N++;
                 }
             }
 
             //отправка сигналов Z-нейронам
-            for (int jj = 0; jj < Zj.Length; jj++)
+            for (int jj = 0; jj < j; jj++)
             {
                 double z_in = 0;
-                for (int ii = 0; ii < Xi.Length; i++)
+                for (int ii = 0; ii < i; ii++)
                 {
                     z_in += Xi[ii].out_x() * v_ij[ii, jj];
                 }

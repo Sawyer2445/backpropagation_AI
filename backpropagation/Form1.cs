@@ -43,7 +43,7 @@ namespace backpropagation
         {
             pic = bmp;
             neuronNetwork = new network(pic);
-            richTextBox1.Text += "\nDONE\n";
+            richTextBox1.Text += "DONE\n";
             clearBMP();
 
         }
@@ -67,13 +67,15 @@ namespace backpropagation
             openFileDialog1.ShowDialog();
             bmp = new Bitmap(openFileDialog1.FileName);
             pictureBox1.Image = bmp;
+            richTextBox1.Text += "Start work\n";
             neuronNetwork.work(bmp);
+            richTextBox1.Text += "End work\n";
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             neuronNetwork.backpropagation();
-            richTextBox1.Text += "\nСумма ошибка : " + neuronNetwork.sumSigma_k().ToString() + "\n";
+            richTextBox1.Text += "Сумма ошибка : " + neuronNetwork.sumSigma_k().ToString() + "\n";
         }
     }
 }
