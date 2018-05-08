@@ -17,6 +17,7 @@ namespace backpropagation
             InitializeComponent();
         }
         Bitmap bmp;
+        double sum_t;
         //Brush brush;
         Pen pen;
         Bitmap pic;
@@ -45,7 +46,7 @@ namespace backpropagation
             neuronNetwork = new network(pic);
             neuronNetwork.example(pic);
             richTextBox1.Text += "Тестовый пример загружен\n";
-            double sum_t = neuronNetwork.sum_T();
+            sum_t = neuronNetwork.sum_T();
             richTextBox1.Text += "T sum: " + sum_t + "\n\n";
             button1.Visible = false;
             
@@ -74,9 +75,10 @@ namespace backpropagation
             richTextBox1.Text += "Start work\n";
             neuronNetwork.work(bmp);
             double sum_sigma = neuronNetwork.sumSigma_k();
-            richTextBox1.Text += "Sigma sum: " + sum_sigma + '\n';
+            richTextBox1.Text += "Сумма ошибки: " + sum_sigma + '\n';
             double sum_Yk = neuronNetwork.sum_Yk();
             richTextBox1.Text += "Y sum: " + sum_Yk + '\n';
+            richTextBox1.Text += "diff: " + (sum_t - sum_Yk) + '\n';
             richTextBox1.Text += "End work\n\n";
         }
 
@@ -84,7 +86,7 @@ namespace backpropagation
         {
             richTextBox1.Text += "\nStart error\n";
             neuronNetwork.backpropagation();
-            richTextBox1.Text += "Сумма ошибка : " + neuronNetwork.sumSigma_k().ToString() + "\n\n";
+            richTextBox1.Text += "Сумма ошибки : " + neuronNetwork.sumSigma_k() + "\n\n";
         }
     }
 }
