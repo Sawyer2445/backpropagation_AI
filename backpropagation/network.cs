@@ -100,19 +100,19 @@ namespace backpropagation
             sigma_k = new double[k];
             sigma_in_j = new double[j];
 
-            //Заполнение примера для сравнения 
-            int N = 0;
-            for (int ii = 0; ii < pic.Size.Width; ii++)
-            {
-                for (int jj = 0; jj < pic.Size.Height; jj++)
-                {
-                    if (pic.GetPixel(ii, jj).R == 0)
-                        T[N] = 1.0;
-                    else
-                        T[N] = 0.0;
-                    N++;
-                }
-            }
+            ////Заполнение примера для сравнения 
+            //int N = 0;
+            //for (int ii = 0; ii < pic.Size.Width; ii++)
+            //{
+            //    for (int jj = 0; jj < pic.Size.Height; jj++)
+            //    {
+            //        if (pic.GetPixel(ii, jj).R == 0)
+            //            T[N] = 1.0;
+            //        else
+            //            T[N] = 0.0;
+            //        N++;
+            //    }
+            //}
 
             //Выбор певоначального значение весов и смещения 
   
@@ -194,6 +194,7 @@ namespace backpropagation
             {
                 sigma_k[kk] = (T[kk] - Yk[kk].out_y()) * ff(Yk[kk].y_in);
             }
+            ;
             //вычисление коррекировки для весов w_jk
             for (int jj = 0; jj < j; jj++)
             {
@@ -202,13 +203,14 @@ namespace backpropagation
                     delta_w_jk[jj, kk] = a * sigma_k[kk] * Zj[jj].out_z();
                 }
             }
+            ;
             //вычисление корректировки смещения w_Ok
             for (int kk = 0; kk < k; kk++)
             {
                 delta_w_Ok[kk] = a * sigma_k[kk];
             }
 
-
+            ;
             //вычисления суммы ошибок w_jk
             for (int jj = 0; jj < j; jj++)
             {
@@ -221,13 +223,13 @@ namespace backpropagation
                 sigma_in_j[jj] = sum_signK_and_w_jk;
             }
 
-
+            ;
             //вычисление величины ошибки для v_ij
-            for(int jj = 0; jj < j; j++)
+            for(int jj = 0; jj < j; jj++)
             {
                 sigma_j[jj] = sigma_in_j[jj] * ff(Zj[jj].z_in);
             }
-
+            ;
             //вычисление корректировки весов v_ij
             for (int ii = 0; ii < i; ii++)
             {
@@ -236,22 +238,22 @@ namespace backpropagation
                     delta_v_ij[ii, jj] = a * sigma_j[jj] * Xi[ii].out_x();
                 }
             }
-
+            ;
             //вычисление величину корректировки смещения 
             for (int jj = 0; jj < j; jj++)
             {
                 v_Oj[jj] = a * sigma_j[jj];
             }
-
+            ;
             //ИЗМЕНЕНИЕ ВЕСОВ w_jk
-            for (int jj = 0; jj < j; j++)
+            for (int jj = 0; jj < j; jj++)
             {
                 for (int kk = 0; kk < k; kk++)
                 {
                     w_jk[jj, kk] = w_jk[jj, kk] + delta_w_jk[jj, kk];
                 }
             }
-
+            ;
             //ИЗМЕНЕНИЕ ВЕСОВ v_ij
             for (int ii = 0; ii < i; ii++)
             {
@@ -287,6 +289,38 @@ namespace backpropagation
             for (int kk = 0; kk < k; kk++)
             {
                 sum += sigma_k[kk];
+            }
+            return sum;
+        }
+
+        /// <summary>
+        /// Пример для сравнения 
+        /// </summary>
+        /// <param name="pic">Картинка для распознования</param>
+        public void example(Bitmap pic)
+        {
+            this.work(pic);
+            for (int kk = 0; kk < k; kk++)
+            {
+                T[kk] = Yk[kk].out_y();
+            }
+        }
+
+        public double sum_Yk()
+        {
+            double sum = 0.0;
+            for (int kk = 0; kk < k; kk++)
+            {
+                sum += Yk[kk].out_y();
+            }
+            return sum;
+        }
+        public double sum_T()
+        {
+            double sum = 0.0;
+            for (int kk = 0; kk < k; kk++)
+            {
+                sum += T[kk];
             }
             return sum;
         }
