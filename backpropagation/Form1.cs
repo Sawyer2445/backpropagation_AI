@@ -16,9 +16,8 @@ namespace backpropagation
         {
             InitializeComponent();
         }
+        double sum_Yk;
         Bitmap bmp;
-        double sum_t;
-        //Brush brush;
         Pen pen;
         Bitmap pic;
         network neuronNetwork;
@@ -28,7 +27,7 @@ namespace backpropagation
             Brush brush = new SolidBrush(Color.Black);
             pen = new Pen(brush, 11);
             //bmp = new Bitmap(3, 5);
-            pic = new Bitmap(3, 5);
+            pic = new Bitmap(pictureBox1.Image);
             //for (int i = 0; i < 3; i++)
             //{
             //    for (int j = 0; j < 5; j++)
@@ -37,22 +36,13 @@ namespace backpropagation
             //    }
             //}
             bmp = new Bitmap(pictureBox1.Image);
-          
+            neuronNetwork = new network(pic);
+            richTextBox1.Text += "Нейронная сеть готова\n";
+
         }
 
      
-        private void button1_Click(object sender, EventArgs e)
-        {
-            pic = new Bitmap( bmp);
-            neuronNetwork = new network(pic);
-            //neuronNetwork.example(pic);
-            richTextBox1.Text += "Тестовый пример загружен\n";
-            sum_t = neuronNetwork.sum_T();
-            richTextBox1.Text += "T sum: " + sum_t + "\n\n";
-            button1.Visible = false;
-            
-
-        }
+      
         /// <summary>
         /// Очищает холст
         /// </summary>
@@ -75,19 +65,18 @@ namespace backpropagation
             pictureBox1.Image = bmp;
             richTextBox1.Text += "Start work\n";
             neuronNetwork.work(bmp);
-            double sum_sigma = neuronNetwork.sumSigma_k();
-            richTextBox1.Text += "Сумма ошибки: " + sum_sigma + '\n';
-            double sum_Yk = neuronNetwork.sum_Yk();
-            richTextBox1.Text += "Y sum: " + sum_Yk + '\n';
-            richTextBox1.Text += "diff: " + (sum_t - sum_Yk) + '\n';
+            sum_Yk = neuronNetwork.sum_Yk();
+            richTextBox1.Text += "Y = " + sum_Yk + '\n';
             richTextBox1.Text += "End work\n\n";
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             richTextBox1.Text += "\nStart error\n";
-            neuronNetwork.backpropagation();
-            richTextBox1.Text += "Сумма ошибки : " + neuronNetwork.sumSigma_k() + "\n\n";
+            if (sum_Yk < 0.5)
+                neuronNetwork.backpropagation(1);
+            else
+                neuronNetwork.backpropagation(0);
         }
     }
 }
