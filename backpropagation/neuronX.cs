@@ -8,11 +8,11 @@ namespace backpropagation
 {
     class neuronX
     {
-        public neuronX(double signal)
+        public neuronX(bool signal)
         {
             x_in = signal;
         }
-        public double out_x() { return x_in; }
-        private double x_in;
+        public double out_x() { return x_in ? 1 : 0; }
+        private bool x_in;
     }
 }

@@ -20,11 +20,7 @@ namespace backpropagation
         public neuronZ[] Zj;
         public neuronY[] Yk;
 
-        /// <summary>
-        /// Значения для сравнения
-        /// (даны учителем)
-        /// </summary>
-        public double[] T;
+      
         /// <summary>
         /// Величина ошибки весов w_jk
         /// </summary>
@@ -33,10 +29,7 @@ namespace backpropagation
         /// Величина ошибки весов v_ij
         /// </summary>
         public double[] sigma_j;
-        /// <summary>
-        /// сумма ошибки w_jk
-        /// </summary>
-        public double[] sigma_in_j;
+     
 
 
         /// <summary>
@@ -55,10 +48,6 @@ namespace backpropagation
         /// корректировки весов w_jk
         /// </summary>
         public double[,] delta_w_jk;
-        /// <summary>
-        /// коррестировки для смещения w_Ok
-        /// </summary>
-        public double[] delta_w_Ok;
 
         /// <summary>
         /// скорость обучения
@@ -69,12 +58,12 @@ namespace backpropagation
         /// Инициализация нейронной сети
         /// </summary>
         /// <param name="pic">Значения для сравнения</param>
-        public network(Bitmap pic)
+        public network(int x, int y)
         {
-            i = pic.Size.Width * pic.Size.Height;
+            i = x * y;
             j = i;
             k = 1;
-            learining_rate = 0.9;
+            learining_rate = 1;
             Xi = new neuronX[i];
             Zj = new neuronZ[j];
             Yk = new neuronY[k];
@@ -88,21 +77,9 @@ namespace backpropagation
             sigma_j = new double[j];
             sigma_k = new double[k];
 
-            ////Заполнение примера для сравнения 
-            //int N = 0;
-            //for (int ii = 0; ii < pic.Size.Width; ii++)
-            //{
-            //    for (int jj = 0; jj < pic.Size.Height; jj++)
-            //    {
-            //        if (pic.GetPixel(ii, jj).R == 0)
-            //            T[N] = 1.0;
-            //        else
-            //            T[N] = 0.0;
-            //        N++;
-            //    }
-            //}
+         
             
-            //Выбор певоначального значение весов и смещения 
+            //Выбор певоначального значение весов 
 
             for (int ii = 0; ii < i; ii++)
             {
@@ -136,9 +113,9 @@ namespace backpropagation
                 for (int jj = 0; jj < bmp.Size.Height; jj++)
                 {
                     if (bmp.GetPixel(ii, jj).R == 0)
-                        Xi[N] = new neuronX(1.0);
+                        Xi[N] = new neuronX(true);
                     else
-                        Xi[N] = new neuronX(0.0);
+                        Xi[N] = new neuronX(false);
                     N++;
                 }
             }
@@ -244,18 +221,7 @@ namespace backpropagation
             return sum;
         }
 
-        /// <summary>
-        /// Пример для сравнения 
-        /// </summary>
-        /// <param name="pic">Картинка для распознования</param>
-        public void example(Bitmap pic)
-        {
-            this.work(pic);
-            for (int kk = 0; kk < k; kk++)
-            {
-                T[kk] = Yk[kk].out_y();
-            }
-        }
+     
 
         public double sum_Yk()
         {
@@ -266,14 +232,6 @@ namespace backpropagation
             }
             return sum;
         }
-        public double sum_T()
-        {
-            double sum = 0.0;
-            for (int ii = 0; ii < i; ii++)
-            {
-                sum += T[ii];
-            }
-            return sum;
-        }
+       
     }
 }
