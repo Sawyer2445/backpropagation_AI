@@ -81,8 +81,8 @@ namespace backpropagation
         {
             i = pic.Size.Width * pic.Size.Height;
             j = i;
-            k = j;
-            a = 2;
+            k = 1;
+            a = 0.0001;
             Xi = new neuronX[i];
             Zj = new neuronZ[j];
             Yk = new neuronY[k];
@@ -101,49 +101,59 @@ namespace backpropagation
             sigma_in_j = new double[j];
 
             ////Заполнение примера для сравнения 
-            //int N = 0;
-            //for (int ii = 0; ii < pic.Size.Width; ii++)
-            //{
-            //    for (int jj = 0; jj < pic.Size.Height; jj++)
-            //    {
-            //        if (pic.GetPixel(ii, jj).R == 0)
-            //            T[N] = 1.0;
-            //        else
-            //            T[N] = 0.0;
-            //        N++;
-            //    }
-            //}
-
+            int N = 0;
+            for (int ii = 0; ii < pic.Size.Width; ii++)
+            {
+                for (int jj = 0; jj < pic.Size.Height; jj++)
+                {
+                    if (pic.GetPixel(ii, jj).R == 0)
+                        T[N] = 1.0;
+                    else
+                        T[N] = 0.0;
+                    N++;
+                }
+            }
+            ;
             //Выбор певоначального значение весов и смещения 
-  
+
             for (int ii = 0; ii < i; ii++)
             {
                 for (int jj = 0; jj < j; jj++)
                 {
                     Random rand1 = new Random();
-                    double min1 = -0.5;
-                    double max1 = 0.5;
+                    double min1 = 0.0;
+                    double max1 = 1.0;
                     v_ij[ii, jj] = rand1.NextDouble() * (max1 - min1) + min1;
+
+                    Random rand = new Random();
+                    double min = 0.0;
+                    double max = 1.0;
+                    v_Oj[jj] = rand.NextDouble() * (max - min) + min;
                 }
-                Random rand = new Random();
-                double min = -0.5;
-                double max = 0.5;
-                v_Oj[ii] = rand.NextDouble() * (max - min) + min;
+                //Random rand = new Random();
+                //double min = 0.0;
+                //double max = 1.0;
+                //v_Oj[ii] = rand.NextDouble() * (max - min) + min;
             }
 
-            for (int ii = 0; ii < i; ii++)
+            for (int jj = 0; jj < j; jj++)
             {
-                for (int jj = 0; jj < j; jj++)
+                for (int kk = 0; kk < k; kk++)
                 {
                     Random rand1 = new Random();
-                    double min1 = -0.5;
-                    double max1 = 0.5;
-                    w_jk[ii, jj] = rand1.NextDouble() * (max1 - min1) + min1;
+                    double min1 = 0.0;
+                    double max1 = 1.0;
+                    w_jk[jj, kk] = rand1.NextDouble() * (max1 - min1) + min1;
+
+                    Random rand = new Random();
+                    double min = 0.0;
+                    double max = 1.0;
+                    w_Ok[kk] = rand.NextDouble() * (max - min) + min;
                 }
-                Random rand = new Random();
-                double min = -0.5;
-                double max = 0.5;
-                w_Ok[ii] = rand.NextDouble() * (max - min) + min;
+                //Random rand = new Random();
+                //double min = 0.0;
+                //double max = 1.0;
+                //w_Ok[kk] = rand.NextDouble() * (max - min) + min;
             }
         }
 
@@ -192,7 +202,7 @@ namespace backpropagation
             //вычисление ошибок весов w_ij
             for (int kk = 0; kk < k; kk++)
             {
-                sigma_k[kk] = (T[kk] - Yk[kk].out_y()) * ff(Yk[kk].y_in);
+                sigma_k[kk] = (Yk[kk].out_y() - T[kk]) * ff(Yk[kk].y_in);
             }
             ;
             //вычисление коррекировки для весов w_jk
@@ -318,9 +328,9 @@ namespace backpropagation
         public double sum_T()
         {
             double sum = 0.0;
-            for (int kk = 0; kk < k; kk++)
+            for (int ii = 0; ii < i; ii++)
             {
-                sum += T[kk];
+                sum += T[ii];
             }
             return sum;
         }

@@ -27,24 +27,25 @@ namespace backpropagation
             
             Brush brush = new SolidBrush(Color.Black);
             pen = new Pen(brush, 11);
-            bmp = new Bitmap(3, 5);
+            //bmp = new Bitmap(3, 5);
             pic = new Bitmap(3, 5);
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 5; j++)
-                {
-                    bmp.SetPixel(i, j, Color.White);
-                }
-            }
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    for (int j = 0; j < 5; j++)
+            //    {
+            //        bmp.SetPixel(i, j, Color.White);
+            //    }
+            //}
+            bmp = new Bitmap(pictureBox1.Image);
           
         }
 
      
         private void button1_Click(object sender, EventArgs e)
         {
-            pic = bmp;
+            pic = new Bitmap( bmp);
             neuronNetwork = new network(pic);
-            neuronNetwork.example(pic);
+            //neuronNetwork.example(pic);
             richTextBox1.Text += "Тестовый пример загружен\n";
             sum_t = neuronNetwork.sum_T();
             richTextBox1.Text += "T sum: " + sum_t + "\n\n";
