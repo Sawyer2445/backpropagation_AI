@@ -28,8 +28,9 @@ namespace backpropagation
             pen = new Pen(brush, 11);
             bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             neuronNetwork = new network(pictureBox1.Width, pictureBox1.Height);
-            pictureBox1.Image = bmp;
             clearBMP();
+            pictureBox1.Image = bmp;
+            
             richTextBox1.Text += "Нейронная сеть готова к работе\n";
 
         }
@@ -57,7 +58,7 @@ namespace backpropagation
             //bmp = new Bitmap(openFileDialog1.FileName);
             //pictureBox1.Image = bmp;
             richTextBox1.Text += "Start work\n";
-            neuronNetwork.work(bmp);
+            neuronNetwork.work(ref bmp);
             sum_Yk = neuronNetwork.sum_Yk();
             richTextBox1.Text += "Y = " + sum_Yk + '\n';
             richTextBox1.Text += "End work\n\n";

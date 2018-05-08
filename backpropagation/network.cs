@@ -104,7 +104,7 @@ namespace backpropagation
             }
         }
 
-        public void work(Bitmap bmp)
+        public void work(ref Bitmap bmp)
         {
             //отправка сигнала X-нейронам 
             int N = 0;
