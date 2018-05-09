@@ -24,8 +24,9 @@ namespace backpropagation
         {
             richTextBox1.Text += "START\n";
             Brush brush = new SolidBrush(Color.Black);
-            pen = new Pen(brush, 20);
+            pen = new Pen(brush, 5);
             bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            
             neuronNetwork = new network(pictureBox1.Width / 100, pictureBox1.Height / 100);
             clearBMP();
             pictureBox1.Image = bmp;
@@ -84,7 +85,7 @@ namespace backpropagation
             {
                 using (Graphics gr = Graphics.FromImage(bmp))
                 {
-                    gr.DrawEllipse(pen, e.X, e.Y, 20, 20);
+                    gr.DrawEllipse(pen, e.X, e.Y, 5, 5);
                 }
                 pictureBox1.Image = bmp;
             }
@@ -129,6 +130,13 @@ namespace backpropagation
         private void button4_Click(object sender, EventArgs e)
         {
             neuronNetwork.writeVandW();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text += "Start learninh\n";
+            neuronNetwork.learning();
+            richTextBox1.Text += "Stop learning\n";
         }
     }
 }

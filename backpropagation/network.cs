@@ -127,9 +127,9 @@ namespace backpropagation
         public network(int x, int y)
         {
             i = x * y;
-            j = i;
+            j = i/2;
             k = 1;
-            learining_rate = 1;
+            learining_rate = 10;
             Xi = new neuronX[i];
             Zj = new neuronZ[j];
             Yk = new neuronY[k];
@@ -304,6 +304,81 @@ namespace backpropagation
                 sum += Yk[kk].out_y();
             }
             return sum;
+        }
+
+        public void learning()
+        {
+            Bitmap[] learningArray = new Bitmap[30];
+            learningArray[0] = new Bitmap(Properties.Resources._1);
+            learningArray[1] = new Bitmap(Properties.Resources._1_1);
+            learningArray[2] = new Bitmap(Properties.Resources._1_2);
+            learningArray[3] = new Bitmap(Properties.Resources._1_3);
+            learningArray[4] = new Bitmap(Properties.Resources._1_4);
+            learningArray[5] = new Bitmap(Properties.Resources._1_5);
+            learningArray[6] = new Bitmap(Properties.Resources._1_6);
+            learningArray[7] = new Bitmap(Properties.Resources._1_7);
+            learningArray[8] = new Bitmap(Properties.Resources._1_8);
+            learningArray[9] = new Bitmap(Properties.Resources._1_9);
+            learningArray[10] = new Bitmap(Properties.Resources._1_10);
+            learningArray[11] = new Bitmap(Properties.Resources._2);
+            learningArray[12] = new Bitmap(Properties.Resources._3);
+            learningArray[13] = new Bitmap(Properties.Resources._4);
+            learningArray[14] = new Bitmap(Properties.Resources._5);
+            learningArray[15] = new Bitmap(Properties.Resources._6);
+            learningArray[16] = new Bitmap(Properties.Resources._7);
+            learningArray[17] = new Bitmap(Properties.Resources._8);
+            learningArray[18] = new Bitmap(Properties.Resources._9);
+            learningArray[19] = new Bitmap(Properties.Resources._10);
+            learningArray[20] = new Bitmap(Properties.Resources._11);
+            learningArray[21] = new Bitmap(Properties.Resources._12);
+            learningArray[22] = new Bitmap(Properties.Resources._13);
+            learningArray[23] = new Bitmap(Properties.Resources._14);
+            learningArray[24] = new Bitmap(Properties.Resources._15);
+            learningArray[25] = new Bitmap(Properties.Resources._16);
+            learningArray[26] = new Bitmap(Properties.Resources._17);
+            learningArray[27] = new Bitmap(Properties.Resources._18);
+            learningArray[28] = new Bitmap(Properties.Resources._19);
+            learningArray[29] = new Bitmap(Properties.Resources._20);
+
+            double[] correctArray = new double[30];
+            for (int ii = 0; ii < 30; ii++)
+            {
+                learningArray[ii] = new Bitmap(learningArray[ii], new Size(200, 300));
+                if (ii < 11)
+                    correctArray[ii] = 1.0;
+                else
+                    correctArray[ii] = 0.0;
+
+            }
+
+            double msb = 1.0;
+            int n = 0;
+            //LEARNING
+            while(true)
+            {
+                for (int jj = 0; jj < 30; jj++)
+                {
+                    this.work(new Bitmap(learningArray[jj], new Size(2, 3)));
+                    if (correctArray[jj] == 1.0 && getY() < 0.5)
+                        backpropagation(1.0);
+
+                    if (correctArray[jj] == 0.0 && getY() > 0.5)
+                        backpropagation(0.0);
+                    //Console.WriteLine(getY());
+                    Console.WriteLine(MSB(correctArray[jj], getY()).ToString());
+                    msb = MSB(correctArray[jj], getY());
+                  
+                }
+                if (msb < 0.09)
+                    break;
+                //Console.WriteLine(++n);
+            }
+          
+            //return 0.0;
+        }
+        private double MSB(double coorect, double Yk)
+        {
+            return (Yk - coorect) * (Yk - coorect);
         }
        
     }
