@@ -16,7 +16,6 @@ namespace backpropagation
         {
             InitializeComponent();
         }
-        float  sum_Yk = 0.0f;
         int sec = 0;
         Bitmap bmp;
         Pen pen;
@@ -25,7 +24,7 @@ namespace backpropagation
         {
             richTextBox1.Text += "START\n";
             Brush brush = new SolidBrush(Color.Black);
-            pen = new Pen(brush, 11);
+            pen = new Pen(brush, 20);
             bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             neuronNetwork = new network(pictureBox1.Width / 10, pictureBox1.Height / 10);
             clearBMP();
@@ -58,12 +57,12 @@ namespace backpropagation
             //bmp = new Bitmap(openFileDialog1.FileName);
             //pictureBox1.Image = bmp;
             richTextBox1.Text += "Start work\n";
-            Bitmap pic = new Bitmap(zipBitmap(bmp));
-            neuronNetwork.work(ref pic);
-            sum_Yk = neuronNetwork.sum_Yk();
-            richTextBox1.Text += "Y = " + sum_Yk.ToString() + '\n';
+            Bitmap pic = new Bitmap(bmp, new Size(bmp.Width /10, bmp.Height/ 10));
+            neuronNetwork.work(pic);
+            //sum_Yk = neuronNetwork.sum_Yk();
+            richTextBox1.Text += "Y = " + neuronNetwork.getY() + '\n';
             richTextBox1.Text += "End work\n\n";
-
+          
             timer1.Start();
             sec = 2;
             
@@ -72,10 +71,10 @@ namespace backpropagation
         private void button2_Click(object sender, EventArgs e)
         {
             richTextBox1.Text += "Backpropagation\n";
-            if (sum_Yk < 0.5)
-                neuronNetwork.backpropagation(1);
+            if (neuronNetwork.getY() < 0.5)
+                neuronNetwork.backpropagation(1.0);
             else
-                neuronNetwork.backpropagation(0);
+                neuronNetwork.backpropagation(0.0);
             richTextBox1.Text += "Backpropagation END\n";
         }
 
@@ -85,14 +84,14 @@ namespace backpropagation
             {
                 using (Graphics gr = Graphics.FromImage(bmp))
                 {
-                    gr.DrawEllipse(pen, e.X, e.Y, 5, 5);
+                    gr.DrawEllipse(pen, e.X, e.Y, 20, 20);
                 }
                 pictureBox1.Image = bmp;
             }
         }
         private Bitmap zipBitmap(Bitmap bmp)
         {
-            Bitmap zip_bmp = new Bitmap(bmp.Width / 10, bmp.Height / 10);
+            Bitmap zip_bmp = new Bitmap(bmp.Width / 50, bmp.Height / 50);
             for (int i = 0; i < bmp.Width; i += 10)
             {
                 for (int j = 0; j < bmp.Height; j += 10)
@@ -112,6 +111,12 @@ namespace backpropagation
                 clearBMP();
                 pictureBox1.Image = bmp;
             }
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            richTextBox1.SelectionStart = richTextBox1.Text.Length;
+            richTextBox1.ScrollToCaret();
         }
     }
 }

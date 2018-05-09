@@ -13,27 +13,26 @@ namespace backpropagation
         /// создает нейрон с его сигналом
         /// </summary>
         /// <param name="y_in">y_in считает сеть</param>
-        public neuronY(float  y_in)
+        public neuronY(double  y_in)
         {
             this.y_in = y_in;
         }
-        public float out_y()
+        public double out_y()
         {
-            return (float)f(y_in);   
+            return f(y_in);   
         }
         /// <summary>
         /// активационная функция
         /// </summary>
         /// <param name="in_">y_in</param>
         /// <returns>результат работы активационной функции</returns>
-        private float  f(float in_)
+        private double  f(double in_)
         {
-            double x = Convert.ToDouble(in_);
-            return (float)(1.0 / (1.0 + Math.Exp(-x)));
-            
+            Console.WriteLine((1.0 / (1 + Math.Pow(Math.E, -in_))));
+            return (1.0 / (1 + Math.Pow(Math.E, -in_)));
         }
 
 
-        public float y_in;
+        public double y_in;
     }
 }
