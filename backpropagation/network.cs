@@ -24,35 +24,35 @@ namespace backpropagation
         /// <summary>
         /// Величина ошибки весов w_jk
         /// </summary>
-        public double[] sigma_k;
+        public float[] sigma_k;
         /// <summary>
         /// Величина ошибки весов v_ij
         /// </summary>
-        public double[] sigma_j;
+        public float[] sigma_j;
      
 
 
         /// <summary>
         /// весы связей X -> Z
         /// </summary>
-        public double[,] v_ij;
+        public float[,] v_ij;
         /// <summary>
         /// корректировки весов v_ij
         /// </summary>
-        public double[,] delta_v_ij;
+        public float[,] delta_v_ij;
         /// <summary>
         /// весы связей Z -> Y
         /// </summary>
-        public double[,] w_jk;
+        public float[,] w_jk;
         /// <summary>
         /// корректировки весов w_jk
         /// </summary>
-        public double[,] delta_w_jk;
+        public float[,] delta_w_jk;
 
         /// <summary>
         /// скорость обучения
         /// </summary>
-        public double learining_rate;
+        public float  learining_rate;
 
         /// <summary>
         /// Инициализация нейронной сети
@@ -67,28 +67,26 @@ namespace backpropagation
             Xi = new neuronX[i];
             Zj = new neuronZ[j];
             Yk = new neuronY[k];
-            v_ij = new double[i, j];
-            delta_v_ij = new double[i, j];
+            v_ij = new float [i, j];
+            delta_v_ij = new float [i, j];
 
-            w_jk = new double[j, k];
-            delta_w_jk = new double[j, k];
+            w_jk = new float [j, k];
+            delta_w_jk = new float [j, k];
 
-            //T = new double[i];
-            sigma_j = new double[j];
-            sigma_k = new double[k];
+            //T = new float [i];
+            sigma_j = new float [j];
+            sigma_k = new float [k];
 
-         
-            
+
+
             //Выбор певоначального значение весов 
 
+            Random rand1 = new Random();
             for (int ii = 0; ii < i; ii++)
             {
                 for (int jj = 0; jj < j; jj++)
                 {
-                    Random rand1 = new Random();
-                    double min1 = 0.0;
-                    double max1 = 1.0;
-                    v_ij[ii, jj] = rand1.NextDouble() * (max1 - min1) + min1;
+                    v_ij[ii, jj] = (float)rand1.NextDouble();
                 }
             }
 
@@ -96,12 +94,10 @@ namespace backpropagation
             {
                 for (int kk = 0; kk < k; kk++)
                 {
-                    Random rand1 = new Random();
-                    double min1 = 0.0;
-                    double max1 = 1.0;
-                    w_jk[jj, kk] = rand1.NextDouble() * (max1 - min1) + min1;
+                    w_jk[jj, kk] = (float)rand1.NextDouble();
                 }
             }
+            ;
         }
 
         public void work(ref Bitmap bmp)
@@ -123,7 +119,7 @@ namespace backpropagation
             //отправка сигналов Z-нейронам
             for (int jj = 0; jj < j; jj++)
             {
-                double z_in = 0;
+                float  z_in = 0;
                 for (int ii = 0; ii < i; ii++)
                 {
                     z_in += Xi[ii].out_x() * v_ij[ii, jj];
@@ -134,13 +130,14 @@ namespace backpropagation
             //отправка сигналов Y-нейронам
             for (int kk = 0; kk < k; kk++)
             {
-                double y_in = 0;
+                float  y_in = 0;
                 for (int jj = 0; jj < j; jj++)
                 {
                     y_in += Zj[jj].out_z() * w_jk[jj, kk];
                 }
                 Yk[kk] = new neuronY(y_in);
             }
+            
         }
         public void backpropagation(int expect)
         {
@@ -198,7 +195,7 @@ namespace backpropagation
         /// </summary>
         /// <param name="x">аргумент</param>
         /// <returns>значение</returns>
-        private double ff(double x)
+        private float ff(float  x)
         {
             return f(x) * (1 - f(x));
         }
@@ -207,13 +204,14 @@ namespace backpropagation
         /// </summary>
         /// <param name="in_">аргумент</param>
         /// <returns>значение</returns>
-        private double f(double in_)
+        private float  f(float  in_)
         {
-            return 1 / (1 + Math.Exp(-1 * in_));
+            double x = Convert.ToDouble(in_);
+            return (float)(1.0 / (1.0 + Math.Exp(-x)));
         }
-        public double sumSigma_k()
+        public float  sumSigma_k()
         {
-            double sum = 0;
+            float  sum = 0;
             for (int kk = 0; kk < k; kk++)
             {
                 sum += sigma_k[kk];
@@ -223,11 +221,13 @@ namespace backpropagation
 
      
 
-        public double sum_Yk()
+        public float  sum_Yk()
         {
-            double sum = 0.0;
+            float sum = 0.0f;
+            float d;
             for (int kk = 0; kk < k; kk++)
             {
+                d = Yk[kk].out_y();
                 sum += Yk[kk].out_y();
             }
             return sum;

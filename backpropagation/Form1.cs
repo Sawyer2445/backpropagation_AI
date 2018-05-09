@@ -16,10 +16,10 @@ namespace backpropagation
         {
             InitializeComponent();
         }
-        double sum_Yk;
+        float  sum_Yk = 0.0f;
+        int sec = 0;
         Bitmap bmp;
         Pen pen;
-        Bitmap pic;
         network neuronNetwork;
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -27,7 +27,7 @@ namespace backpropagation
             Brush brush = new SolidBrush(Color.Black);
             pen = new Pen(brush, 11);
             bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            neuronNetwork = new network(pictureBox1.Width, pictureBox1.Height);
+            neuronNetwork = new network(pictureBox1.Width / 10, pictureBox1.Height / 10);
             clearBMP();
             pictureBox1.Image = bmp;
             
@@ -42,9 +42,9 @@ namespace backpropagation
         /// </summary>
         private void clearBMP()
         {
-            for (int i = 0; i < bmp.Size.Height; i++)
+            for (int i = 0; i < bmp.Size.Width; i++)
             {
-                for (int j = 0; j < bmp.Size.Width; j++)
+                for (int j = 0; j < bmp.Size.Height; j++)
                 {
                     bmp.SetPixel(i, j, Color.White);
                 }
@@ -58,11 +58,15 @@ namespace backpropagation
             //bmp = new Bitmap(openFileDialog1.FileName);
             //pictureBox1.Image = bmp;
             richTextBox1.Text += "Start work\n";
-            neuronNetwork.work(ref bmp);
+            Bitmap pic = new Bitmap(zipBitmap(bmp));
+            neuronNetwork.work(ref pic);
             sum_Yk = neuronNetwork.sum_Yk();
-            richTextBox1.Text += "Y = " + sum_Yk + '\n';
+            richTextBox1.Text += "Y = " + sum_Yk.ToString() + '\n';
             richTextBox1.Text += "End work\n\n";
-            clearBMP();
+
+            timer1.Start();
+            sec = 2;
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -81,8 +85,31 @@ namespace backpropagation
             {
                 using (Graphics gr = Graphics.FromImage(bmp))
                 {
-                    gr.DrawEllipse(pen, e.X, e.Y, 11, 11);
+                    gr.DrawEllipse(pen, e.X, e.Y, 5, 5);
                 }
+                pictureBox1.Image = bmp;
+            }
+        }
+        private Bitmap zipBitmap(Bitmap bmp)
+        {
+            Bitmap zip_bmp = new Bitmap(bmp.Width / 10, bmp.Height / 10);
+            for (int i = 0; i < bmp.Width; i += 10)
+            {
+                for (int j = 0; j < bmp.Height; j += 10)
+                {
+                    zip_bmp.SetPixel(i / 10, j / 10, bmp.GetPixel(i, j));
+                }
+            }
+            return zip_bmp;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            --sec;
+            if (sec <= 0)
+            {
+                timer1.Stop();
+                clearBMP();
                 pictureBox1.Image = bmp;
             }
         }

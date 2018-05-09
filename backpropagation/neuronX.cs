@@ -12,7 +12,7 @@ namespace backpropagation
         {
             x_in = signal;
         }
-        public double out_x() { return x_in ? 1 : 0; }
+        public float out_x() { return x_in ? 1.0f : 0.0f; }
         private bool x_in;
     }
 }
