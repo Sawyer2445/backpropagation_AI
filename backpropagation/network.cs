@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,6 +56,71 @@ namespace backpropagation
         public double  learining_rate;
 
         /// <summary>
+        /// Читает матрицы весов из файлов
+        /// </summary>
+        /// <param name="file_V">файл с v_ij</param>
+        /// <param name="file_W">файл с w_jk</param>
+        public void readVandW()
+        {
+            StreamReader read1 = new StreamReader("weghts\\v_ij.txt");
+            string matrix_v_str = read1.ReadToEnd();
+            read1.Close();
+            var lines = matrix_v_str.Split('\n');
+            var rowNumber = lines.Length;
+            var columnNumber = lines.First().Split(' ').Length;
+
+            for (int ii = 0; ii < rowNumber - 1; ii++)
+            {
+                string[] columns = lines[ii].Split(' ');
+                for (int jj = 0; jj < columnNumber - 1; jj++)
+                {
+                    double.TryParse(columns[jj], out v_ij[ii, jj]);
+                }
+            }
+            
+            StreamReader read2 = new StreamReader("weghts\\w_jk.txt");
+            string matrix_w_str = read2.ReadToEnd();
+            read2.Close();
+            var lines2 = matrix_w_str.Split('\n');
+            var rowNumber2 = lines2.Length;
+            var columnNumber2 = lines2.First().Split(' ').Length;
+
+            for (int ii = 0; ii < rowNumber2-1; ii++)
+            {
+                string[] columns2 = lines2[ii].Split(' ');
+                for (int jj = 0; jj < columnNumber2-1; jj++)
+                {
+                    double.TryParse(columns2[jj], out w_jk[ii, jj]);
+                }
+            }
+            
+        }
+        public void writeVandW()
+        {
+            StreamWriter writer1 = new StreamWriter("weghts\\v_ij.txt");
+            for (int ii = 0; ii < i; ii++)
+            {
+                for (int jj = 0; jj < j; jj++)
+                {
+                    writer1.Write("{0} ", v_ij[ii, jj]);
+                }
+                writer1.WriteLine();
+            }
+            writer1.Close();
+
+            StreamWriter writer2 = new StreamWriter("weghts\\w_jk.txt");
+            for (int jj = 0; jj < j; jj++)
+            {
+                for (int kk = 0; kk < k; kk++)
+                {
+                    writer2.Write("{0} ", w_jk[jj, kk]);
+                }
+                writer2.WriteLine();
+            }
+            writer2.Close();
+        }
+
+        /// <summary>
         /// Инициализация нейронной сети
         /// </summary>
         /// <param name="pic">Значения для сравнения</param>
@@ -63,7 +129,7 @@ namespace backpropagation
             i = x * y;
             j = i;
             k = 1;
-            learining_rate = i * j* j;
+            learining_rate = 1;
             Xi = new neuronX[i];
             Zj = new neuronZ[j];
             Yk = new neuronY[k];
@@ -116,27 +182,32 @@ namespace backpropagation
                 }
             }
 
+            double z_in = 0.0;
             //отправка сигналов Z-нейронам
             for (int jj = 0; jj < j; jj++)
             {
-                double  z_in = 0.0;
+                
                 for (int ii = 0; ii < i; ii++)
                 {
                     z_in += Xi[ii].out_x() * v_ij[ii, jj];
                 }
                 Zj[jj] = new neuronZ(z_in);
+                z_in = 0.0;
             }
 
+            double y_in = 0.0;
             //отправка сигналов Y-нейронам
             for (int kk = 0; kk < k; kk++)
             {
-                double y_in = 0.0;
+                
                 for (int jj = 0; jj < j; jj++)
                 {
                     y_in += Zj[jj].out_z() * w_jk[jj, kk];
                 }
                 Yk[kk] = new neuronY(y_in);
+                y_in = 0.0;
             }
+            
             
         }
         public void backpropagation(double expect)

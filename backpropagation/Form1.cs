@@ -26,7 +26,7 @@ namespace backpropagation
             Brush brush = new SolidBrush(Color.Black);
             pen = new Pen(brush, 20);
             bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            neuronNetwork = new network(pictureBox1.Width / 10, pictureBox1.Height / 10);
+            neuronNetwork = new network(pictureBox1.Width / 100, pictureBox1.Height / 100);
             clearBMP();
             pictureBox1.Image = bmp;
             
@@ -57,7 +57,7 @@ namespace backpropagation
             //bmp = new Bitmap(openFileDialog1.FileName);
             //pictureBox1.Image = bmp;
             richTextBox1.Text += "Start work\n";
-            Bitmap pic = new Bitmap(bmp, new Size(bmp.Width /10, bmp.Height/ 10));
+            Bitmap pic = new Bitmap(bmp, new Size(bmp.Width /100, bmp.Height/ 100));
             neuronNetwork.work(pic);
             //sum_Yk = neuronNetwork.sum_Yk();
             richTextBox1.Text += "Y = " + neuronNetwork.getY() + '\n';
@@ -117,6 +117,18 @@ namespace backpropagation
         {
             richTextBox1.SelectionStart = richTextBox1.Text.Length;
             richTextBox1.ScrollToCaret();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            neuronNetwork.readVandW();
+
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            neuronNetwork.writeVandW();
         }
     }
 }
