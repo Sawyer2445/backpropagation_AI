@@ -28,8 +28,8 @@ namespace backpropagation
         /// <returns>результат работы активационной функции</returns>
         private double  f(double in_)
         {
-            //Console.WriteLine((1.0 / (1 + Math.Pow(Math.E, -in_))));
-            return (1 / (1 + Math.Pow(Math.E, -in_)));
+            double d = (1 / (1 + Math.Pow(Math.E, -in_)));
+            return d;
         }
 
 
