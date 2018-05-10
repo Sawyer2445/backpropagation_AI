@@ -27,7 +27,7 @@ namespace backpropagation
             pen = new Pen(brush, 5);
             bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             
-            neuronNetwork = new network(pictureBox1.Width / 100, pictureBox1.Height / 100);
+            neuronNetwork = new network(pictureBox1.Width / 4, pictureBox1.Height / 4);
             clearBMP();
             pictureBox1.Image = bmp;
             
@@ -58,7 +58,9 @@ namespace backpropagation
             //bmp = new Bitmap(openFileDialog1.FileName);
             //pictureBox1.Image = bmp;
             richTextBox1.Text += "Start work\n";
-            Bitmap pic = new Bitmap(bmp, new Size(bmp.Width /100, bmp.Height/ 100));
+            Bitmap pic = new Bitmap(bmp, new Size(bmp.Width / 4, bmp.Height/ 4));
+            //Bitmap pic = new Bitmap(Properties.Resources._1, new Size(bmp.Width / 100, bmp.Height / 100));
+            //pictureBox1.Image = pic;
             neuronNetwork.work(pic);
             //sum_Yk = neuronNetwork.sum_Yk();
             richTextBox1.Text += "Y = " + neuronNetwork.getY() + '\n';
@@ -90,18 +92,7 @@ namespace backpropagation
                 pictureBox1.Image = bmp;
             }
         }
-        private Bitmap zipBitmap(Bitmap bmp)
-        {
-            Bitmap zip_bmp = new Bitmap(bmp.Width / 50, bmp.Height / 50);
-            for (int i = 0; i < bmp.Width; i += 10)
-            {
-                for (int j = 0; j < bmp.Height; j += 10)
-                {
-                    zip_bmp.SetPixel(i / 10, j / 10, bmp.GetPixel(i, j));
-                }
-            }
-            return zip_bmp;
-        }
+        
 
         private void timer1_Tick(object sender, EventArgs e)
         {

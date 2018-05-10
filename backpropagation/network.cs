@@ -129,7 +129,7 @@ namespace backpropagation
             i = x * y;
             j = i/2;
             k = 1;
-            learining_rate = 10;
+            learining_rate = 1000;
             Xi = new neuronX[i];
             Zj = new neuronZ[j];
             Yk = new neuronY[k];
@@ -174,10 +174,10 @@ namespace backpropagation
             {
                 for (int jj = 0; jj < bmp.Size.Height; jj++)
                 {
-                    if (bmp.GetPixel(ii, jj).R == 0)
-                        Xi[N] = new neuronX(true);
-                    else
+                    if (bmp.GetPixel(ii, jj).R >= 250)
                         Xi[N] = new neuronX(false);
+                    else
+                        Xi[N] = new neuronX(true);
                     N++;
                 }
             }
@@ -186,7 +186,6 @@ namespace backpropagation
             //отправка сигналов Z-нейронам
             for (int jj = 0; jj < j; jj++)
             {
-                
                 for (int ii = 0; ii < i; ii++)
                 {
                     z_in += Xi[ii].out_x() * v_ij[ii, jj];
@@ -199,7 +198,6 @@ namespace backpropagation
             //отправка сигналов Y-нейронам
             for (int kk = 0; kk < k; kk++)
             {
-                
                 for (int jj = 0; jj < j; jj++)
                 {
                     y_in += Zj[jj].out_z() * w_jk[jj, kk];
@@ -348,7 +346,6 @@ namespace backpropagation
                     correctArray[ii] = 1.0;
                 else
                     correctArray[ii] = 0.0;
-
             }
 
             double msb = 1.0;
@@ -358,7 +355,7 @@ namespace backpropagation
             {
                 for (int jj = 0; jj < 30; jj++)
                 {
-                    this.work(new Bitmap(learningArray[jj], new Size(2, 3)));
+                    this.work(new Bitmap(learningArray[jj], new Size(50, 75)));
                     if (correctArray[jj] == 1.0 && getY() < 0.5)
                         backpropagation(1.0);
 
@@ -369,17 +366,21 @@ namespace backpropagation
                     msb = MSB(correctArray[jj], getY());
                   
                 }
-                if (msb < 0.09)
+                n++;
+                if (msb < 0.05)
+                {
+                    Console.WriteLine(n);
                     break;
-                //Console.WriteLine(++n);
+                }
             }
           
             //return 0.0;
         }
         private double MSB(double coorect, double Yk)
         {
-            return (Yk - coorect) * (Yk - coorect);
+            return Math.Pow(Yk - coorect, 2);
         }
+       
        
     }
 }
