@@ -133,11 +133,11 @@ namespace backpropagation
             Xi = new neuronX[i];
             Zj = new neuronZ[j];
             Yk = new neuronY[k];
-            v_ij = new double [i, j];
-            delta_v_ij = new double [i, j];
+            v_ij = new double [j, i];
+            delta_v_ij = new double [j, i];
 
-            w_jk = new double [j, k];
-            delta_w_jk = new double [j, k];
+            w_jk = new double [k, j];
+            delta_w_jk = new double [k, j];
 
             //T = new double [i];
             sigma_j = new double [j];
@@ -152,7 +152,7 @@ namespace backpropagation
             {
                 for (int jj = 0; jj < j; jj++)
                 {
-                    v_ij[ii, jj] = rand1.NextDouble();
+                    v_ij[jj, ii] = rand1.NextDouble();
                 }
             }
 
@@ -160,7 +160,7 @@ namespace backpropagation
             {
                 for (int kk = 0; kk < k; kk++)
                 {
-                    w_jk[jj, kk] = rand1.NextDouble();
+                    w_jk[kk, jj] = rand1.NextDouble();
                 }
             }
             ;
@@ -184,7 +184,7 @@ namespace backpropagation
             {
                 for (int ii = 0; ii < i; ii++)
                 {
-                    z_in += Xi[ii].out_x() * v_ij[ii, jj];
+                    z_in += Xi[ii].out_x() * v_ij[jj, ii];
                 }
                 Zj[jj] = new neuronZ(z_in);
                 z_in = 0.0;
@@ -196,7 +196,7 @@ namespace backpropagation
             {
                 for (int jj = 0; jj < j; jj++)
                 {
-                    y_in += Zj[jj].out_z() * w_jk[jj, kk];
+                    y_in += Zj[jj].out_z() * w_jk[kk, jj];
                 }
                 Yk[kk] = new neuronY(y_in);
                 y_in = 0.0;
@@ -217,7 +217,7 @@ namespace backpropagation
             {
                 for (int kk = 0; kk < k; kk++)
                 {
-                    delta_w_jk[jj, kk] = sigma_k[kk] * Yk[kk].out_y() * (1 - Yk[kk].out_y());
+                    delta_w_jk[kk, jj] = sigma_k[kk] * (Yk[kk].out_y() * (1 - Yk[kk].out_y()));
                 }
             }
             //ИЗМЕНЕНИЕ ВЕСОВ w_jk
@@ -225,7 +225,7 @@ namespace backpropagation
             {
                 for (int kk = 0; kk < k; kk++)
                 {
-                    w_jk[jj, kk] -= (Zj[jj].out_z() * delta_w_jk[jj, kk] * learining_rate);
+                    w_jk[kk, jj] -= (Zj[jj].out_z() * delta_w_jk[kk, jj] * learining_rate);
                 }
             }
 
@@ -235,7 +235,7 @@ namespace backpropagation
             {
                 for (int kk = 0; kk < k; kk++)
                 {
-                    sigma_j[jj] = delta_w_jk[jj,kk] * w_jk[jj, kk];
+                    sigma_j[jj] = delta_w_jk[kk,jj] * w_jk[kk, jj];
                 }
             }
             ////вычисление корректировки весов v_ij
@@ -243,7 +243,7 @@ namespace backpropagation
             {
                 for (int jj = 0; jj < j; jj++)
                 {
-                    delta_v_ij[ii, jj] = sigma_j[jj] * Zj[jj].out_z()*(1 - Zj[jj].out_z());
+                    delta_v_ij[jj, ii] = sigma_j[jj] * (Zj[jj].out_z()*(1 - Zj[jj].out_z()));
                 }
             }
             //ИЗМЕНЕНИЕ ВЕСОВ v_ij
@@ -251,7 +251,7 @@ namespace backpropagation
             {
                 for (int jj = 0; jj < j; jj++)
                 {
-                    v_ij[ii, jj] -= (Xi[ii].out_x() * delta_v_ij[ii, jj] * learining_rate);
+                    v_ij[jj, ii] -= (Xi[ii].out_x() * delta_v_ij[jj, ii] * learining_rate);
                 }
             }
             ;
@@ -302,7 +302,37 @@ namespace backpropagation
 
         public void learning()
         {
-            
+            bool[,] train = new bool[8, 4]{
+                {false, false ,false, false},
+                {false, false, true, true},
+                {false, true, false,  false},
+                {false, true, true, false },
+                {true, false, false, true},
+                {true, false, true, true},
+                {true, true, false, false },
+                {true, true, true, true}
+            };
+
+            int n = 100;
+            while(n != 0)
+            {
+                for (int ii = 0; ii < 8; ii++)
+                {
+                    bool[] sub = new bool[3]
+                    {
+                       train[ii, 0], train[ii, 1], train[ii, 2]
+                    };
+                    work(sub);
+                    double Y = getY();
+                    if (Y > 0.5 && train[ii, 3] == false)
+                        backpropagation(1.0);
+                    if (Y < 0.5 && train[ii, 3] == true)
+                        backpropagation(0.0);
+                    double correct = train[ii, 3] ? 1.0 : 0.0;
+                    Console.WriteLine(MSB(correct, Y));
+                }
+                --n;
+            }
         }
           
         
