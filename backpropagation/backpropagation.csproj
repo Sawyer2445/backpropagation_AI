@@ -63,18 +63,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -83,96 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1_1.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1_2.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1_3.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1_4.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1_5.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1_6.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1_7.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1_8.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1_9.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\1_10.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\2.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\3.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\4.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\5.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\6.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\7.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\8.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\9.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\10.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\11.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\12.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\13.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\14.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\15.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\16.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\17.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\18.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\19.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\20.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
