@@ -46,9 +46,11 @@ namespace backpropagation
 
             neuronNetwork.work(signals);
             double Y = neuronNetwork.getY();
-            if (Y > 0)
+
+            if (Y > 0.5)
                 richTextBox1.Text += "ИДЁМ В ГОСТИ\n";
-            richTextBox1.Text += neuronNetwork.getY().ToString() + '\n';
+            else
+                richTextBox1.Text += "В ГОСТИ НЕ ИДЁМ\n";
 
             sec = 2;
             timer1.Start();
@@ -73,6 +75,7 @@ namespace backpropagation
         private void button1_Click(object sender, EventArgs e)
         {
             neuronNetwork.readVandW();
+            richTextBox1.Text += "Нейронная сеть обучена\n";
         }
 
         private void button4_Click(object sender, EventArgs e)
