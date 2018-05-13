@@ -15,6 +15,7 @@ namespace backpropagation
         network neuronNetwork;
         bool[] signals;
         int sec;
+
         public Form1()
         {
             InitializeComponent();
@@ -24,9 +25,12 @@ namespace backpropagation
         {
             signals = new bool[3];
             neuronNetwork = new network(signals.Length);
-            richTextBox1.Text += "Нейронная сеть готова к работе\n";
+            richTextBox1.Text += "Нейронная сеть обучается\n";
+            neuronNetwork.learning();
+            richTextBox1.Text += "Сеть готова к работе\n";
 
         }
+
         private void button3_Click(object sender, EventArgs e)
         {
             if (cb_drink.Checked)
@@ -55,7 +59,7 @@ namespace backpropagation
             sec = 2;
             timer1.Start();
         }
-
+        
         private void button2_Click(object sender, EventArgs e)
         {
             richTextBox1.Text += "Backpropagation\n";
@@ -70,24 +74,6 @@ namespace backpropagation
         {
             richTextBox1.SelectionStart = richTextBox1.Text.Length;
             richTextBox1.ScrollToCaret();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            neuronNetwork.readVandW();
-            richTextBox1.Text += "Нейронная сеть обучена\n";
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            neuronNetwork.writeVandW();
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            richTextBox1.Text += "Start learninh\n";
-            neuronNetwork.learning();
-            richTextBox1.Text += "Stop learning\n";
         }
 
         private void timer1_Tick(object sender, EventArgs e)

@@ -17,6 +17,7 @@ namespace backpropagation
         /// количество нейронов X, Z, Y соответственно
         /// </summary>
         public int i, j, k; 
+
         public neuronX[] Xi;
         public neuronZ[] Zj;
         public neuronY[] Yk;
@@ -58,71 +59,6 @@ namespace backpropagation
         /// скорость обучения
         /// </summary>
         public double  learining_rate;
-
-        /// <summary>
-        /// Читает матрицы весов из файлов
-        /// </summary>
-        /// <param name="file_V">файл с v_ij</param>
-        /// <param name="file_W">файл с w_jk</param>
-        public void readVandW()
-        {
-            StreamReader read1 = new StreamReader("weghts\\v_ij.txt");
-            string matrix_v_str = read1.ReadToEnd();
-            read1.Close();
-            var lines = matrix_v_str.Split('\n');
-            var rowNumber = lines.Length;
-            var columnNumber = lines.First().Split(' ').Length;
-
-            for (int ii = 0; ii < rowNumber - 1; ii++)
-            {
-                string[] columns = lines[ii].Split(' ');
-                for (int jj = 0; jj < columnNumber - 1; jj++)
-                {
-                    double.TryParse(columns[jj], out v_ij[ii, jj]);
-                }
-            }
-            
-            StreamReader read2 = new StreamReader("weghts\\w_jk.txt");
-            string matrix_w_str = read2.ReadToEnd();
-            read2.Close();
-            var lines2 = matrix_w_str.Split('\n');
-            var rowNumber2 = lines2.Length;
-            var columnNumber2 = lines2.First().Split(' ').Length;
-
-            for (int ii = 0; ii < rowNumber2-1; ii++)
-            {
-                string[] columns2 = lines2[ii].Split(' ');
-                for (int jj = 0; jj < columnNumber2-1; jj++)
-                {
-                    double.TryParse(columns2[jj], out w_jk[ii, jj]);
-                }
-            }
-            
-        }
-        public void writeVandW()
-        {
-            StreamWriter writer1 = new StreamWriter("weghts\\v_ij.txt");
-            for (int ii = 0; ii < i; ii++)
-            {
-                for (int jj = 0; jj < j; jj++)
-                {
-                    writer1.Write("{0} ", v_ij[ii, jj]);
-                }
-                writer1.WriteLine();
-            }
-            writer1.Close();
-
-            StreamWriter writer2 = new StreamWriter("weghts\\w_jk.txt");
-            for (int jj = 0; jj < j; jj++)
-            {
-                for (int kk = 0; kk < k; kk++)
-                {
-                    writer2.Write("{0} ", w_jk[jj, kk]);
-                }
-                writer2.WriteLine();
-            }
-            writer2.Close();
-        }
 
         /// <summary>
         /// Инициализация нейронной сети
@@ -176,6 +112,10 @@ namespace backpropagation
             
         }
 
+        /// <summary>
+        /// Работа сети
+        /// </summary>
+        /// <param name="signals"></param>
         public void work(bool[] signals)
         {
             Xi = new neuronX[i];
@@ -217,6 +157,11 @@ namespace backpropagation
             
             
         }
+        
+        /// <summary>
+        /// Обучение сети
+        /// </summary>
+        /// <param name="expect"></param>
         public void backpropagation(double expect)
         {
             for (int kk = 0; kk < k; kk++)
@@ -274,15 +219,7 @@ namespace backpropagation
                 }
             }
         }
-        /// <summary>
-        /// производная анализирующей функции
-        /// </summary>
-        /// <param name="x">аргумент</param>
-        /// <returns>значение</returns>
-        private double ff(double  x)
-        {
-            return f(x) * (1.0 - f(x));
-        }
+  
         /// <summary>
         /// активационная функция
         /// </summary>
@@ -292,33 +229,19 @@ namespace backpropagation
         {
             return (1.0 / (1 + Math.Pow(Math.E, -in_)));
         }
-        public double  sumSigma_k()
-        {
-            double  sum = 0;
-            for (int kk = 0; kk < k; kk++)
-            {
-                sum += sigma_k[kk];
-            }
-            return sum;
-        }
-
-     
+       
+        /// <summary>
+        /// Выход сети
+        /// </summary>
+        /// <returns>Выход сети</returns>
         public double getY()
         {
             return Yk[0].out_y();
         }
-        public double  sum_Yk()
-        {
-            double sum = 0.0;
-            double d = 0.0;
-            for (int kk = 0; kk < k; kk++)
-            {
-                sum += Yk[kk].out_y();
-            }
-            return sum;
-        }
-
-
+       
+        /// <summary>
+        /// Обучение сети
+        /// </summary>
         public void learning()
         {
             bool[,] train = new bool[8, 4]{
@@ -368,10 +291,12 @@ namespace backpropagation
             }
          }
                
-      
-    
-          
-        
+        /// <summary>
+        /// Среднее квадратичное отклонение
+        /// </summary>
+        /// <param name="coorect">Массив правильных ответов</param>
+        /// <param name="Yk">Массив ответов сети</param>
+        /// <returns>Отклонение</returns>
         private double MSB(double[] coorect, double[] Yk)
         {
             double sum = 0.0;
@@ -382,7 +307,5 @@ namespace backpropagation
             ;
             return Math.Sqrt(sum/8);
         }
-       
-       
     }
 }

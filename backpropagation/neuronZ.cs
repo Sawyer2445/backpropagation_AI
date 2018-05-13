@@ -9,7 +9,7 @@ namespace backpropagation
     class neuronZ
     {
         /// <summary>
-        /// создаёт нейрон с его сигналом 
+        /// Cоздаёт нейрон с его сигналом 
         /// </summary>
         /// <param name="z_in">z_in считает сеть</param>
         public neuronZ(double z_in)
